@@ -6,6 +6,8 @@ os_env = os.environ
 
 class Config(object):
     SECRET_KEY = os_env.get('MYFLASKAPP_SECRET', 'secret-key')  # TODO: Change me
+    SECURITY_PASSWORD_HASH = 'bcrypt'
+    SECURITY_PASSWORD_SALT = SECRET_KEY
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13

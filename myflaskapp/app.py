@@ -2,7 +2,9 @@
 """The app module, containing the app factory function."""
 from flask import Flask, render_template
 from flask.ext.heroku import Heroku
-
+import logging
+import sys
+import os
 from myflaskapp.settings import ProdConfig
 from myflaskapp.assets import assets
 from myflaskapp.extensions import (
@@ -24,15 +26,20 @@ def create_app(config_object=ProdConfig):
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__)
+
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
+
     app.config.from_object(config_object)
 
     if config_object == ProdConfig:
-        heroku = Heroku(app)
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
     return app
+
 
 def register_extensions(app):
     assets.init_app(app)
