@@ -59,11 +59,9 @@
 </div><!-- end container -->
 
 {% include "footer.html" %}
-
-<!-- JavaScript at the bottom for fast page loading -->
-{% assets "js_all" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script type="text/javascript" src="{{ url_for('static', filename='libs/jQuery/dist/jquery.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='libs/bootstrap/dist/js/bootstrap.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/plugins.js')}}"></script>
 {% block js %}{% endblock %}
 <!-- end scripts -->
 {% endblock %}
