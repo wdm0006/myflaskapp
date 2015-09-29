@@ -1,6 +1,6 @@
 import datetime as dt
 from flask.ext.login import UserMixin
-from myflaskapp.extensions import db
+from myflaskapp.extensions import db, bcrypt
 from myflaskapp.database import (
     Column,
     Model,
