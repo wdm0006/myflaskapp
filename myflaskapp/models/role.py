@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from myflaskapp.extensions
+from myflaskapp.extensions import db
 from myflaskapp.database import (
     Column,
     db,

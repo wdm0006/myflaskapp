@@ -1,9 +1,8 @@
 import datetime as dt
 from flask.ext.login import UserMixin
-from myflaskapp.extensions
+from myflaskapp.extensions import db
 from myflaskapp.database import (
     Column,
-    db,
     Model,
     ReferenceCol,
     relationship,
