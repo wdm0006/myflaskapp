@@ -2,7 +2,7 @@
 from flask_assets import Bundle, Environment
 
 css = Bundle(
-    "libs/bootstrap/dist/css/dark/bootstrap.css",
+    "libs/bootstrap/dist/css/paper/bootstrap.css",
     "css/style.css",
     filters="cssmin",
     output="public/css/common.css"
