@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import (Blueprint, request, render_template, flash, url_for, send_from_directory, make_response,
+from flask import (Blueprint, request, flash, url_for, send_from_directory, make_response,
                    redirect, current_app)
 
 from flask_login import login_required, logout_user, current_user
-from myflaskapp.utils import flash_errors
+from myflaskapp.utils import flash_errors, render_extensions
 from myflaskapp.forms.user import PasswordForm, EmailForm, UsernameForm
 from myflaskapp.extensions import mail
 from myflaskapp.models.user import User
@@ -20,6 +20,7 @@ blueprint = Blueprint("user", __name__, url_prefix='/users',
 def profile():
     return render_template("users/profile.html")
 
+
 @blueprint.route('/reset', methods=["GET", "POST"])
 def reset():
     form = EmailForm()
@@ -33,7 +34,7 @@ def reset():
         token = ts.dumps(emailuser.email, salt='recover-key')
 
         recover_url = url_for('user.reset_with_token', token=token, _external=True)
-        html = render_template('email/recover.html', recover_url=recover_url)
+        html = render_extensions('email/recover.html', recover_url=recover_url)
 
         msg = Message(html=html, recipients=[emailuser.email], subject=subject)
         mail.send(msg)
@@ -42,7 +43,8 @@ def reset():
     else:
         flash_errors(form)
 
-    return render_template('users/reset.html', resetform=form)
+    return render_extensions('users/reset.html', resetform=form)
+
 
 @blueprint.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
@@ -52,7 +54,7 @@ def reset_with_token(token):
         ts = URLSafeTimedSerializer(Config.SECRET_KEY)
         email = ts.loads(token, salt="recover-key", max_age=86400)
     except:
-        return render_template("404.html")
+        return render_extensions("404.html")
 
     form = PasswordForm()
 
@@ -64,7 +66,7 @@ def reset_with_token(token):
     else:
         flash_errors(form)
 
-    return render_template('users/reset_with_token.html', resetform=form, token=token)
+    return render_extensions('users/reset_with_token.html', resetform=form, token=token)
 
 
 @blueprint.route('/change_password', methods=['GET', 'POST'])
@@ -78,7 +80,7 @@ def change_password():
     else:
         flash_errors(form)
 
-    return render_template('users/change_password.html', resetform=form)
+    return render_extensions('users/change_password.html', resetform=form)
 
 
 @blueprint.route('/change_username', methods=['GET', 'POST'])
@@ -92,12 +94,13 @@ def change_username():
     else:
         flash_errors(form)
 
-    return render_template('users/change_username.html', resetform=form)
+    return render_extensions('users/change_username.html', resetform=form)
+
 
 @blueprint.route('/unsubscribe')
 @login_required
 def unsubscribe():
-    return render_template('users/unsubscribe.html')
+    return render_extensions('users/unsubscribe.html')
 
 
 @blueprint.route('/unsubscribe_confirm')

@@ -21,6 +21,7 @@ class Config(object):
     MAIL_USERNAME = ''
     MAIL_PASSWORD = ''
     MAIL_DEFAULT_SENDER = ''
+    GOOGLE_ANALYTICS = ''
 
 
 class ProdConfig(Config):

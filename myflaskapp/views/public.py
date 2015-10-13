@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import (Blueprint, request, render_template, flash, url_for, send_from_directory, make_response,
+from flask import (Blueprint, request, flash, url_for, send_from_directory, make_response,
                    redirect, current_app)
 import datetime
 
@@ -10,7 +10,7 @@ from myflaskapp.extensions import login_manager
 from myflaskapp.models.user import User
 from myflaskapp.forms.public import LoginForm
 from myflaskapp.forms.user import RegisterForm
-from myflaskapp.utils import flash_errors
+from myflaskapp.utils import flash_errors, render_extensions
 from myflaskapp.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
@@ -33,7 +33,7 @@ def home():
             return redirect(redirect_url)
         else:
             flash_errors(form)
-    return render_template("public/home.html", form=form)
+    return render_extensions("public/home.html", form=form)
 
 
 @blueprint.route('/logout/')
@@ -56,18 +56,20 @@ def register():
         return redirect(url_for('public.home'))
     else:
         flash_errors(form)
-    return render_template('public/register.html', form=form)
+    return render_extensions('public/register.html', form=form)
 
 
 @blueprint.route("/about/")
 def about():
     form = LoginForm(request.form)
-    return render_template("public/about.html", form=form)
+    return render_extensions("public/about.html", form=form)
+
 
 @blueprint.route('/robots.txt')
 @blueprint.route('/favicon.ico')
 def static_from_root():
     return send_from_directory(current_app.static_folder, request.path[1:])
+
 
 @blueprint.route('/sitemap.xml', methods=['GET'])
 def sitemap():
@@ -82,7 +84,7 @@ def sitemap():
         if "GET" in rule.methods and len(rule.arguments) == 0:
             pages.append([rule.rule, ten_days_ago])
 
-    sitemap_xml = render_template('public/sitemap_template.xml', pages=pages)
+    sitemap_xml = render_extensions('public/sitemap_template.xml', pages=pages)
     response = make_response(sitemap_xml)
     response.headers["Content-Type"] = "application/xml"
 
