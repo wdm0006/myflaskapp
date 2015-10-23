@@ -42,3 +42,4 @@ Flask-Mail
 
 # Heroku integration
 Flask-Heroku
+markdown

@@ -18,7 +18,7 @@ blueprint = Blueprint("user", __name__, url_prefix='/users',
 @blueprint.route("/")
 @login_required
 def profile():
-    return render_template("users/profile.html")
+    return render_extensions("users/profile.html")
 
 
 @blueprint.route('/reset', methods=["GET", "POST"])

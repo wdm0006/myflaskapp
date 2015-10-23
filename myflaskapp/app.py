@@ -16,7 +16,7 @@ from myflaskapp.extensions import (
     migrate,
     debug_toolbar,
 )
-from myflaskapp.views import public, user
+from myflaskapp.views import public, user, blog, admin
 
 
 def create_app(config_object=ProdConfig):
@@ -56,6 +56,8 @@ def register_extensions(app):
 def register_blueprints(app):
     app.register_blueprint(public.blueprint)
     app.register_blueprint(user.blueprint)
+    app.register_blueprint(blog.blueprint)
+    app.register_blueprint(admin.blueprint)
     return None
 
 

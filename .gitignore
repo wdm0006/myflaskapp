@@ -5,6 +5,9 @@
 migration/
 migrations/
 
+*.db
+dev.db
+
 # Packages
 *.egg
 *.egg-info

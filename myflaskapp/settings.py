@@ -5,7 +5,7 @@ os_env = os.environ
 
 
 class Config(object):
-    SECRET_KEY = os_env.get('MYFLASKAPP_SECRET', 'secret-key')  # TODO: Change me
+    SECRET_KEY = os_env.get('MYFLASKAPP_SECRET', 'secret-key')
     SECURITY_PASSWORD_HASH = 'bcrypt'
     SECURITY_PASSWORD_SALT = SECRET_KEY
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
