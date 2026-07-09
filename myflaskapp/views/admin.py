@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import Blueprint, request
+from flask import Blueprint, abort, request
 
 from flask_login import login_required, current_user
 from myflaskapp.models.post import Post
@@ -45,6 +45,10 @@ def edit_blog(blog_id):
     if not current_user.is_admin:
         return render_extensions('401.html')
 
+    post_obj = Post.query.filter_by(id=int(blog_id)).first()
+    if post_obj is None:
+        abort(404)
+
     if request.method == 'POST':
         try:
             content = str(request.form['content'])
@@ -61,13 +65,11 @@ def edit_blog(blog_id):
         except Exception:
             title = ''
 
-        post = Post(title=title, body=content, slug=slug)
-        post.save()
+        post_obj.title = title
+        post_obj.slug = slug
+        post_obj.body = content
+        post_obj.save()
 
-        current_user.posts.append(post)
-        current_user.save()
-
-    post_obj = Post.query.filter_by(id=int(blog_id)).first()
     post_content = {
         'title': str(post_obj.title),
         'slug': str(post_obj.slug),
