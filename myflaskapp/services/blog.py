@@ -13,7 +13,7 @@ def get_post_detail(pk):
     :return:
     """
 
-    post = Post.query.filter_by(id=int(pk)).first()
+    post = Post.query.filter_by(id=int(pk)).first_or_404()
 
     if post.users is not None:
         author = post.users.first_name + ' ' + post.users.last_name
