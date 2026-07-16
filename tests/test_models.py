@@ -4,7 +4,8 @@ import datetime as dt
 
 import pytest
 
-from myflaskapp.models.user import User, Role
+from myflaskapp.models.role import Role
+from myflaskapp.models.user import User
 from .factories import UserFactory
 
 
