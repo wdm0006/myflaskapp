@@ -3,7 +3,10 @@
 {% block content %}
     <div class="col-lg-4">
         <h3>Unsubscribe</h3>
-        <p>We hope you don't really want to unsubscribe from {{ cookiecutter.app_name }}, but if you insist, click below.</p>
-         <a href="{{ url_for('user.unsubscribe_confirm') }}" class="btn btn-default btn-submit" onclick="return confirm('Are you sure?')">Unsubscribe</a>
+        <p>We hope you don't really want to unsubscribe from My Flask App, but if you insist, click below.</p>
+        <form id="unsubscribeForm" action="{{ url_for('user.unsubscribe_confirm') }}" method="POST" onsubmit="return confirm('Are you sure?')">
+            {{ unsubscribeform.csrf_token }}
+            <input class="btn btn-default btn-submit" type="submit" value="Unsubscribe" />
+        </form>
     </div>
 {% endblock %}

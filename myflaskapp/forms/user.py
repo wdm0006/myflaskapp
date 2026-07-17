@@ -46,3 +46,8 @@ class UsernameForm(Form):
     username = StringField('Username', validators=[DataRequired()])
     username2 = StringField('Confirm Username',
                             validators=[DataRequired(), EqualTo('username', message='Usernames must match')])
+
+
+class UnsubscribeForm(Form):
+    """Carries only the CSRF token; the submit button is the whole confirmation."""
+    pass
