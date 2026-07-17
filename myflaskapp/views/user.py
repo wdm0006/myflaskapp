@@ -4,7 +4,7 @@ from flask import (Blueprint, request, flash, url_for, send_from_directory, make
 
 from flask_login import login_required, logout_user, current_user
 from myflaskapp.utils import flash_errors, render_extensions
-from myflaskapp.forms.user import PasswordForm, EmailForm, UsernameForm
+from myflaskapp.forms.user import PasswordForm, EmailForm, UsernameForm, UnsubscribeForm
 from myflaskapp.extensions import mail
 from myflaskapp.models.user import User
 from flask_mail import Message
@@ -100,12 +100,17 @@ def change_username():
 @blueprint.route('/unsubscribe')
 @login_required
 def unsubscribe():
-    return render_extensions('users/unsubscribe.html')
+    return render_extensions('users/unsubscribe.html', unsubscribeform=UnsubscribeForm())
 
 
-@blueprint.route('/unsubscribe_confirm')
+@blueprint.route('/unsubscribe_confirm', methods=['POST'])
 @login_required
 def unsubscribe_confirm():
+    form = UnsubscribeForm()
+    if not form.validate_on_submit():
+        flash_errors(form)
+        return redirect(url_for('user.unsubscribe'))
+
     user = current_user
     user.username = '%s (Unsubscribed)' % (user.username,)
     user.email = '%s (Unsubscribed)' % (user.email,)
