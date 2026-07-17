@@ -13,6 +13,31 @@ from .factories import UserFactory
 
 class TestLoggingIn:
 
+    def login(self, testapp, user, next_url=None):
+        url = "/"
+        if next_url is not None:
+            url += "?next={0}".format(next_url)
+        return testapp.post(url, {
+            'username': user.username,
+            'password': 'myprecious',
+        })
+
+    def test_redirects_to_local_next_url(self, user, testapp):
+        res = self.login(testapp, user, '/blog/1/')
+        assert res.location == 'http://localhost:80/blog/1/'
+
+    @pytest.mark.parametrize('next_url', [
+        'https://attacker.example/',
+        '//attacker.example/',
+    ])
+    def test_rejects_external_next_url(self, user, testapp, next_url):
+        res = self.login(testapp, user, next_url)
+        assert res.location == 'http://localhost:80/users/'
+
+    def test_redirects_to_profile_without_next_url(self, user, testapp):
+        res = self.login(testapp, user)
+        assert res.location == 'http://localhost:80/users/'
+
     def test_can_log_in_returns_200(self, user, testapp):
         # Goes to homepage
         res = testapp.get("/")

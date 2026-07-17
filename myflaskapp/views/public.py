@@ -3,6 +3,7 @@
 from flask import (Blueprint, request, flash, url_for, send_from_directory, make_response,
                    redirect, current_app)
 import datetime
+from urlparse import urljoin, urlparse
 
 from flask_login import login_user, login_required, logout_user
 
@@ -14,6 +15,13 @@ from myflaskapp.utils import flash_errors, render_extensions
 from myflaskapp.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
+
+
+def is_safe_url(target):
+    host_url = urlparse(request.host_url)
+    redirect_url = urlparse(urljoin(request.host_url, target))
+    return (redirect_url.scheme in ('http', 'https') and
+            redirect_url.netloc == host_url.netloc)
 
 
 @login_manager.user_loader
@@ -29,7 +37,9 @@ def home():
         if form.validate_on_submit():
             login_user(form.user)
             flash("You are logged in.", 'success')
-            redirect_url = request.args.get("next") or url_for("user.profile")
+            redirect_url = request.args.get("next")
+            if not redirect_url or not is_safe_url(redirect_url):
+                redirect_url = url_for("user.profile")
             return redirect(redirect_url)
         else:
             flash_errors(form)
